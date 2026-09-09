@@ -2730,3 +2730,420 @@ footer p {
     }
 
 }
+/* =================================
+   VERSION 2 - FRONT/BACK ROTATION
+================================= */
+
+
+/* HERO PRODUCT */
+
+.hero-product {
+
+    transform-style: preserve-3d;
+
+    cursor: grab;
+
+    touch-action: pan-y;
+
+}
+
+
+.hero-product:active {
+
+    cursor: grabbing;
+
+}
+
+
+/* FLIP ANIMATION */
+
+.hero-product.flipping {
+
+    animation:
+        productFlip 0.5s ease;
+
+}
+
+
+@keyframes productFlip {
+
+    0% {
+
+        transform:
+            perspective(1200px)
+            rotateY(0deg)
+            scale(1);
+
+    }
+
+
+    50% {
+
+        transform:
+            perspective(1200px)
+            rotateY(90deg)
+            scale(0.9);
+
+    }
+
+
+    100% {
+
+        transform:
+            perspective(1200px)
+            rotateY(0deg)
+            scale(1);
+
+    }
+
+}
+
+
+
+/* HERO ROTATION BUTTONS */
+
+.rotation-controls {
+
+    position: absolute;
+
+    bottom: 55px;
+
+    display: flex;
+
+    gap: 5px;
+
+    z-index: 20;
+
+}
+
+
+.rotation-button {
+
+    background:
+        rgba(5,5,5,0.85);
+
+    border:
+        1px solid #333;
+
+    color: #888;
+
+    padding:
+        10px 14px;
+
+    font-size: 0.55rem;
+
+    letter-spacing: 1.5px;
+
+    transition: 0.3s;
+
+}
+
+
+.rotation-button:hover {
+
+    border-color: #e10f18;
+
+    color: white;
+
+}
+
+
+.rotation-button.active {
+
+    background: #e10f18;
+
+    border-color: #e10f18;
+
+    color: white;
+
+}
+
+
+
+/* PRODUCT CARDS */
+
+.product-card-image {
+
+    perspective: 1000px;
+
+}
+
+
+.card-product-image {
+
+    transition:
+        transform 0.4s ease,
+        opacity 0.3s ease;
+
+}
+
+
+.card-product-image.card-flip {
+
+    transform:
+        rotateY(90deg)
+        scale(0.95);
+
+    opacity: 0.7;
+
+}
+
+
+
+/* FRONT BACK BUTTONS */
+
+.card-views {
+
+    position: absolute;
+
+    top: 18px;
+
+    right: 18px;
+
+    z-index: 10;
+
+    display: flex;
+
+    background:
+        rgba(0,0,0,0.7);
+
+}
+
+
+.card-view {
+
+    border:
+        1px solid #333;
+
+    background:
+        rgba(10,10,10,0.8);
+
+    color: #777;
+
+    padding:
+        8px 9px;
+
+    font-size: 0.45rem;
+
+    letter-spacing: 1px;
+
+}
+
+
+.card-view.active {
+
+    background: #e10f18;
+
+    border-color: #e10f18;
+
+    color: white;
+
+}
+
+
+
+/* MODAL PRODUCT */
+
+.modal-product-area {
+
+    min-height: 550px;
+
+    background: #151515;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+}
+
+
+.modal-product-area img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.5s ease,
+        opacity 0.3s ease;
+
+    cursor: grab;
+
+    touch-action: pan-y;
+
+}
+
+
+.modal-product-area img:active {
+
+    cursor: grabbing;
+
+}
+
+
+.modal-product-area img.modal-flipping {
+
+    animation:
+        modalFlip 0.5s ease;
+
+}
+
+
+@keyframes modalFlip {
+
+    0% {
+
+        transform:
+            perspective(1200px)
+            rotateY(0deg);
+
+    }
+
+
+    50% {
+
+        transform:
+            perspective(1200px)
+            rotateY(90deg)
+            scale(0.9);
+
+    }
+
+
+    100% {
+
+        transform:
+            perspective(1200px)
+            rotateY(0deg);
+
+    }
+
+}
+
+
+
+/* MODAL ROTATION BUTTONS */
+
+.modal-rotation {
+
+    position: absolute;
+
+    bottom: 55px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    display: flex;
+
+    gap: 5px;
+
+    z-index: 10;
+
+}
+
+
+.modal-view-button {
+
+    background:
+        rgba(0,0,0,0.8);
+
+    border:
+        1px solid #333;
+
+    color: #888;
+
+    padding:
+        10px 14px;
+
+    font-size: 0.55rem;
+
+    letter-spacing: 1px;
+
+}
+
+
+.modal-view-button.active {
+
+    background: #e10f18;
+
+    border-color: #e10f18;
+
+    color: white;
+
+}
+
+
+.modal-drag {
+
+    position: absolute;
+
+    bottom: 22px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    color: #888;
+
+    font-size: 0.5rem;
+
+    letter-spacing: 2px;
+
+    white-space: nowrap;
+
+}
+
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .rotation-controls {
+
+        bottom: 45px;
+
+    }
+
+
+    .drag-text {
+
+        bottom: 15px;
+
+    }
+
+
+    .modal-product-area {
+
+        min-height: 420px;
+
+    }
+
+
+    .modal-rotation {
+
+        bottom: 50px;
+
+    }
+
+
+    .card-views {
+
+        top: 12px;
+
+        right: 12px;
+
+    }
+
+}
