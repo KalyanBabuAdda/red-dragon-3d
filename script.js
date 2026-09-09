@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () {
 
     /* =========================
        GLOBAL STATE
@@ -970,4 +970,533 @@ document.addEventListener("DOMContentLoaded", () => {
     const addCartButton =
         document.getElementById(
             "add-cart-button"
-  
+        );
+
+
+    if (addCartButton) {
+
+        addCartButton.addEventListener(
+            "click",
+            () => {
+
+                if (!selectedProduct) {
+                    return;
+                }
+
+
+                if (!selectedSize) {
+
+                    showToast(
+                        "PLEASE SELECT A SIZE"
+                    );
+
+                    return;
+                }
+
+
+                const existingItem =
+                    cart.find(
+                        item =>
+                            item.id ===
+                            selectedProduct.id &&
+                            item.size ===
+                            selectedSize
+                    );
+
+
+                if (existingItem) {
+
+                    existingItem.quantity++;
+
+                } else {
+
+                    cart.push({
+
+                        id:
+                            selectedProduct.id,
+
+                        name:
+                            selectedProduct.name,
+
+                        price:
+                            selectedProduct.price,
+
+                        image:
+                            selectedProduct.front,
+
+                        size:
+                            selectedSize,
+
+                        quantity: 1
+
+                    });
+
+                }
+
+
+                saveCart();
+
+                renderCart();
+
+                showToast(
+                    "ADDED TO CART"
+                );
+
+
+                if (modal) {
+                    closeProductModal();
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       SAVE CART
+    ========================= */
+
+    function saveCart() {
+
+        localStorage.setItem(
+            "redDragonCart",
+            JSON.stringify(cart)
+        );
+
+    }
+
+
+    /* =========================
+       CART
+    ========================= */
+
+    function renderCart() {
+
+        if (!cartItems) return;
+
+        cartItems.innerHTML = "";
+
+
+        if (cart.length === 0) {
+
+            cartItems.innerHTML = `
+                <div class="empty-cart">
+                    YOUR CART IS EMPTY
+                </div>
+            `;
+
+            updateCartSummary();
+
+            return;
+        }
+
+
+        cart.forEach(
+            (item, index) => {
+
+                const cartItem =
+                    document.createElement(
+                        "div"
+                    );
+
+                cartItem.className =
+                    "cart-item";
+
+
+                cartItem.innerHTML = `
+
+                    <img
+                        src="${item.image}"
+                        alt="${item.name}"
+                    >
+
+                    <div class="cart-item-info">
+
+                        <h3>
+                            ${item.name}
+                        </h3>
+
+                        <span>
+                            SIZE: ${item.size}
+                        </span>
+
+                        <strong>
+                            ₹${item.price}
+                        </strong>
+
+                        <div class="quantity-controls">
+
+                            <button
+                                type="button"
+                                data-action="minus"
+                                data-index="${index}"
+                            >
+                                −
+                            </button>
+
+                            <span>
+                                ${item.quantity}
+                            </span>
+
+                            <button
+                                type="button"
+                                data-action="plus"
+                                data-index="${index}"
+                            >
+                                +
+                            </button>
+
+                            <button
+                                type="button"
+                                class="remove-item"
+                                data-action="remove"
+                                data-index="${index}"
+                            >
+                                REMOVE
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                cartItems.appendChild(
+                    cartItem
+                );
+
+            }
+        );
+
+
+        cartItems
+            .querySelectorAll(
+                "[data-action]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const action =
+                            button.dataset.action;
+
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
+
+
+                        if (
+                            index < 0 ||
+                            index >= cart.length
+                        ) {
+                            return;
+                        }
+
+
+                        if (action === "minus") {
+
+                            cart[index].quantity--;
+
+                            if (
+                                cart[index].quantity <=
+                                0
+                            ) {
+
+                                cart.splice(
+                                    index,
+                                    1
+                                );
+
+                            }
+
+                        }
+
+
+                        if (action === "plus") {
+
+                            cart[index].quantity++;
+
+                        }
+
+
+                        if (action === "remove") {
+
+                            cart.splice(
+                                index,
+                                1
+                            );
+
+                        }
+
+
+                        saveCart();
+
+                        renderCart();
+
+                    }
+                );
+
+            });
+
+
+        updateCartSummary();
+    }
+
+
+    function updateCartSummary() {
+
+        let quantity = 0;
+        let total = 0;
+
+
+        cart.forEach(item => {
+
+            quantity +=
+                item.quantity;
+
+            total +=
+                item.price *
+                item.quantity;
+
+        });
+
+
+        if (cartCount) {
+
+            cartCount.textContent =
+                quantity;
+
+        }
+
+
+        if (cartTotal) {
+
+            cartTotal.textContent =
+                "₹" + total;
+
+        }
+
+    }
+
+
+    /* =========================
+       OPEN / CLOSE CART
+    ========================= */
+
+    function openCart() {
+
+        if (cartDrawer) {
+            cartDrawer.classList.add(
+                "open"
+            );
+        }
+
+        if (cartOverlay) {
+            cartOverlay.classList.add(
+                "show"
+            );
+        }
+
+        document.body.style.overflow =
+            "hidden";
+    }
+
+
+    function closeCart() {
+
+        if (cartDrawer) {
+            cartDrawer.classList.remove(
+                "open"
+            );
+        }
+
+        if (cartOverlay) {
+            cartOverlay.classList.remove(
+                "show"
+            );
+        }
+
+        document.body.style.overflow =
+            "";
+    }
+
+
+    const openCartButton =
+        document.getElementById(
+            "open-cart"
+        );
+
+    const closeCartButton =
+        document.getElementById(
+            "close-cart"
+        );
+
+
+    if (openCartButton) {
+
+        openCartButton.addEventListener(
+            "click",
+            openCart
+        );
+
+    }
+
+
+    if (closeCartButton) {
+
+        closeCartButton.addEventListener(
+            "click",
+            closeCart
+        );
+
+    }
+
+
+    if (cartOverlay) {
+
+        cartOverlay.addEventListener(
+            "click",
+            closeCart
+        );
+
+    }
+
+
+    /* =========================
+       CHECKOUT
+    ========================= */
+
+    const checkoutButton =
+        document.getElementById(
+            "checkout-button"
+        );
+
+
+    if (checkoutButton) {
+
+        checkoutButton.addEventListener(
+            "click",
+            () => {
+
+                if (cart.length === 0) {
+
+                    showToast(
+                        "YOUR CART IS EMPTY"
+                    );
+
+                    return;
+                }
+
+
+                showToast(
+                    "CHECKOUT COMING SOON"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    const menuButton =
+        document.getElementById(
+            "menu-button"
+        );
+
+    const mobileMenu =
+        document.getElementById(
+            "mobile-menu"
+        );
+
+
+    if (menuButton && mobileMenu) {
+
+        menuButton.addEventListener(
+            "click",
+            () => {
+
+                mobileMenu.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+
+        mobileMenu
+            .querySelectorAll("a")
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        mobileMenu.classList.remove(
+                            "open"
+                        );
+
+                    }
+                );
+
+            });
+
+    }
+
+
+    /* =========================
+       NEWSLETTER
+    ========================= */
+
+    const newsletterForm =
+        document.getElementById(
+            "newsletter-form"
+        );
+
+
+    if (newsletterForm) {
+
+        newsletterForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                const input =
+                    newsletterForm.querySelector(
+                        "input"
+                    );
+
+                if (input) {
+                    input.value = "";
+                }
+
+                showToast(
+                    "THANK YOU FOR JOINING THE DRAGON"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       INITIALIZE
+    ========================= */
+
+    renderProducts();
+
+    renderCart();
+
+    updateHeroRotationButtons();
+
+});
