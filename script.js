@@ -1,524 +1,501 @@
-/* ========================================
-   RED DRAGON STREETWEAR
-   3D HERO + PRODUCT SHOWCASE
-   AUTO ROTATION + MANUAL DRAG
-======================================== */
+
+/* ================================
+   VARIABLES
+================================ */
+
+const heroImage =
+    document.getElementById("hero-image");
+
+const heroProduct =
+    document.getElementById("hero-product");
+
+const switchers =
+    document.querySelectorAll(".switcher");
+
+const productNumber =
+    document.querySelector(".product-number");
+
+const nextProduct =
+    document.getElementById("next-product");
+
+let currentProduct = 0;
+
+let selectedProduct = null;
+
+let selectedSize = null;
+
+let cart =
+    JSON.parse(localStorage.getItem("redDragonCart")) || [];
 
 
-/* ========================================
-   HERO 3D SHOWCASE
-======================================== */
 
-const heroShirt = document.querySelector(".hero-shirt-3d");
-const heroProduct = document.querySelector(".hero-product");
+/* ================================
+   LOADER
+================================ */
 
-if (heroShirt && heroProduct) {
+window.addEventListener("load", () => {
 
-    /* ========================================
-       ROTATION
-    ======================================== */
+    setTimeout(() => {
 
-    // Start HERO on BACK view
-    let rotation = 180;
+        document
+            .getElementById("loader")
+            .classList
+            .add("hide");
 
-    const autoRotationSpeed = 0.35;
+    }, 900);
 
-    let isDragging = false;
-    let lastPointerX = 0;
-    let manualVelocity = 0;
-
-    // Automatic rotation resumes 2 seconds after release
-    let resumeAt = 0;
+});
 
 
-    /* ========================================
-       MOUSE / TOUCH POSITION
-    ======================================== */
 
-    let mouseX = 0;
-    let mouseY = 0;
+/* ================================
+   HERO PRODUCT SWITCHER
+================================ */
 
-    let currentX = 0;
-    let currentY = 0;
+function changeHeroProduct(index) {
 
+    currentProduct = index;
 
-    /* ========================================
-       POINTER DOWN
-    ======================================== */
-
-    heroShirt.addEventListener("pointerdown", function (event) {
-
-        isDragging = true;
-
-        lastPointerX = event.clientX;
-
-        manualVelocity = 0;
-
-        // Pause automatic rotation
-        resumeAt = Infinity;
-
-        heroShirt.setPointerCapture(event.pointerId);
-
-        event.preventDefault();
-
-    });
+    const product =
+        products[index];
 
 
-    /* ========================================
-       POINTER MOVE
-    ======================================== */
+    heroProduct.classList.add("changing");
 
-    heroShirt.addEventListener("pointermove", function (event) {
 
-        if (!isDragging) return;
+    setTimeout(() => {
 
-        const currentPointerX = event.clientX;
+        heroImage.src =
+            product.image;
 
-        const difference =
-            currentPointerX - lastPointerX;
 
-        const dragAmount =
-            difference * 0.6;
+        productNumber.textContent =
+            "0" + (index + 1);
 
-        rotation += dragAmount;
 
-        manualVelocity = dragAmount;
+        heroProduct.classList.remove("changing");
 
-        lastPointerX = currentPointerX;
+    }, 250);
+
+
+    switchers.forEach((button) => {
+
+        button.classList.remove("active");
 
     });
 
 
-    /* ========================================
-       POINTER UP
-    ======================================== */
-
-    function stopHeroDragging(event) {
-
-        if (!isDragging) return;
-
-        isDragging = false;
-
-        try {
-
-            heroShirt.releasePointerCapture(
-                event.pointerId
-            );
-
-        } catch (error) {}
-
-
-        // Momentum
-        if (Math.abs(manualVelocity) > 0.1) {
-
-            rotation += manualVelocity * 3;
-
-        }
-
-
-        // Resume automatic rotation after 2 seconds
-        resumeAt =
-            performance.now() + 2000;
-
-        manualVelocity = 0;
-
-    }
-
-
-    heroShirt.addEventListener(
-        "pointerup",
-        stopHeroDragging
-    );
-
-    heroShirt.addEventListener(
-        "pointercancel",
-        stopHeroDragging
-    );
-
-
-    /* ========================================
-       MOUSE TILT
-    ======================================== */
-
-    document.addEventListener("mousemove", function (event) {
-
-        if (isDragging) return;
-
-        mouseX =
-            (event.clientX / window.innerWidth) - 0.5;
-
-        mouseY =
-            (event.clientY / window.innerHeight) - 0.5;
-
-    });
-
-
-    /* ========================================
-       TOUCH TILT
-    ======================================== */
-
-    document.addEventListener("touchmove", function (event) {
-
-        if (!event.touches.length) return;
-
-        const touch = event.touches[0];
-
-        mouseX =
-            (touch.clientX / window.innerWidth) - 0.5;
-
-        mouseY =
-            (touch.clientY / window.innerHeight) - 0.5;
-
-    }, { passive: true });
-
-
-    /* ========================================
-       HERO ANIMATION
-    ======================================== */
-
-    function animateHero(time) {
-
-        if (
-            !isDragging &&
-            time >= resumeAt
-        ) {
-
-            rotation += autoRotationSpeed;
-
-        }
-
-
-        if (rotation > 360) {
-            rotation -= 360;
-        }
-
-        if (rotation < -360) {
-            rotation += 360;
-        }
-
-
-        currentX +=
-            (mouseX - currentX) * 0.05;
-
-        currentY +=
-            (mouseY - currentY) * 0.05;
-
-
-        const floating =
-            Math.sin(time * 0.0015) * 10;
-
-
-        const tiltX =
-            currentY * -8;
-
-        const tiltY =
-            currentX * 10;
-
-
-        heroShirt.style.transform = `
-            translateY(${floating}px)
-            rotateX(${tiltX}deg)
-            rotateY(${rotation + tiltY}deg)
-            scale(1.02)
-        `;
-
-
-        heroProduct.style.setProperty(
-            "--glow-x",
-            `${50 + currentX * 30}%`
-        );
-
-        heroProduct.style.setProperty(
-            "--glow-y",
-            `${50 + currentY * 30}%`
-        );
-
-
-        requestAnimationFrame(animateHero);
-
-    }
-
-
-    requestAnimationFrame(animateHero);
+    switchers[index]
+        .classList
+        .add("active");
 
 }
 
 
-/* ========================================
-   INDIVIDUAL PRODUCT SHOWCASE
-======================================== */
+switchers.forEach((button, index) => {
+
+    button.addEventListener("click", () => {
+
+        changeHeroProduct(index);
+
+    });
+
+});
 
 
-/*
-   Product information
-*/
+nextProduct.addEventListener("click", () => {
 
-const products = [
+    currentProduct++;
 
-    {
-        number: "01",
-        name: "PAWAN KALYAN",
-        subtitle: "POWER STAR EDITION",
-        front: "assets/product-1-front.png",
-        back: "assets/product-1-back.png"
-    },
+    if (currentProduct >= products.length) {
 
-    {
-        number: "02",
-        name: "POWER STAR",
-        subtitle: "EYE OF THE STAR",
-        front: "assets/product-2-front.png",
-        back: "assets/product-2-back.png"
-    },
+        currentProduct = 0;
 
-    {
-        number: "03",
-        name: "KALYAN BABU",
-        subtitle: "SINCE 1971",
-        front: "assets/product-3-front.png",
-        back: "assets/product-3-back.png"
     }
 
-];
+
+    changeHeroProduct(currentProduct);
+
+});
 
 
-/* ========================================
-   CREATE PRODUCT MODAL
-======================================== */
 
-const productModal = document.createElement("div");
+/* ================================
+   AUTO PRODUCT SWITCH
+================================ */
 
-productModal.className =
-    "product-showcase-modal";
+setInterval(() => {
 
-productModal.innerHTML = `
+    currentProduct++;
 
-    <div class="showcase-overlay"></div>
+    if (currentProduct >= products.length) {
 
-    <div class="showcase-window">
+        currentProduct = 0;
 
-        <button
-            class="showcase-close"
-            aria-label="Close product"
-        >
-            ×
-        </button>
+    }
 
 
-        <div class="showcase-content">
+    changeHeroProduct(currentProduct);
+
+}, 7000);
 
 
-            <!-- Product 3D Area -->
 
-            <div class="showcase-product">
+/* ================================
+   3D MOUSE EFFECT
+================================ */
 
-                <div class="showcase-glow"></div>
+document.addEventListener("mousemove", (event) => {
 
-                <div
-                    class="showcase-shirt"
-                    id="showcase-shirt"
-                >
-
-                    <div class="showcase-face showcase-front">
-
-                        <img
-                            id="showcase-front-image"
-                            src=""
-                            alt="Product Front"
-                        >
-
-                    </div>
+    if (window.innerWidth < 768) return;
 
 
-                    <div class="showcase-face showcase-back">
-
-                        <img
-                            id="showcase-back-image"
-                            src=""
-                            alt="Product Back"
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
+    const centerX =
+        window.innerWidth / 2;
 
 
-            <!-- Product Information -->
+    const centerY =
+        window.innerHeight / 2;
 
-            <div class="showcase-info">
 
-                <span
-                    class="showcase-number"
-                    id="showcase-number"
-                >
-                    01
+    const rotateY =
+        (event.clientX - centerX) / 35;
+
+
+    const rotateX =
+        (event.clientY - centerY) / 45;
+
+
+    heroProduct.style.transform =
+
+        `perspective(1000px)
+        rotateY(${rotateY}deg)
+        rotateX(${-rotateX}deg)
+        translateZ(20px)`;
+
+});
+
+
+
+/* ================================
+   RESET HERO POSITION
+================================ */
+
+document.addEventListener("mouseleave", () => {
+
+    heroProduct.style.transform =
+
+        `perspective(1000px)
+        rotateY(0deg)
+        rotateX(0deg)`;
+
+});
+
+
+
+/* ================================
+   PARTICLES
+================================ */
+
+const particles =
+    document.getElementById("particles");
+
+
+for (let i = 0; i < 40; i++) {
+
+    const particle =
+        document.createElement("span");
+
+
+    particle.style.left =
+        Math.random() * 100 + "%";
+
+
+    particle.style.top =
+        Math.random() * 100 + "%";
+
+
+    particle.style.animationDelay =
+        Math.random() * 8 + "s";
+
+
+    particle.style.animationDuration =
+        5 + Math.random() * 8 + "s";
+
+
+    particles.appendChild(particle);
+
+}
+
+
+
+/* ================================
+   CREATE PRODUCTS
+================================ */
+
+const productsGrid =
+    document.getElementById("products-grid");
+
+
+function renderProducts() {
+
+    productsGrid.innerHTML = "";
+
+
+    products.forEach((product) => {
+
+        const card =
+            document.createElement("article");
+
+
+        card.className =
+            "product-card";
+
+
+        card.innerHTML = `
+
+            <div class="product-card-image">
+
+                <span class="card-number">
+
+                    ${product.number}
+
                 </span>
 
-                <h2 id="showcase-name">
-                    PAWAN KALYAN
-                </h2>
 
-                <p id="showcase-subtitle">
-                    POWER STAR EDITION
-                </p>
+                <img
+                    src="${product.image}"
+                    alt="${product.name}">
 
-                <div class="showcase-divider"></div>
 
-                <p class="showcase-instruction">
-                    DRAG TO ROTATE
-                </p>
+                <div class="image-glow"></div>
+
 
                 <button
-                    class="showcase-close-button"
-                    type="button"
-                >
-                    CLOSE
+                    class="quick-view"
+                    data-id="${product.id}">
+
+                    VIEW PRODUCT
+
+                    →
+
                 </button>
 
             </div>
 
-        </div>
 
-    </div>
-
-`;
+            <div class="product-card-info">
 
 
-/* Add modal to page */
+                <div>
 
-document.body.appendChild(productModal);
+                    <span>
 
+                        RED DRAGON / DROP ${product.number}
 
-/* ========================================
-   MODAL ELEMENTS
-======================================== */
-
-const showcaseShirt =
-    document.querySelector("#showcase-shirt");
-
-const showcaseFrontImage =
-    document.querySelector("#showcase-front-image");
-
-const showcaseBackImage =
-    document.querySelector("#showcase-back-image");
-
-const showcaseNumber =
-    document.querySelector("#showcase-number");
-
-const showcaseName =
-    document.querySelector("#showcase-name");
-
-const showcaseSubtitle =
-    document.querySelector("#showcase-subtitle");
-
-const showcaseClose =
-    document.querySelector(".showcase-close");
-
-const showcaseCloseButton =
-    document.querySelector(".showcase-close-button");
-
-const showcaseOverlay =
-    document.querySelector(".showcase-overlay");
+                    </span>
 
 
-/* ========================================
-   PRODUCT SHOWCASE VARIABLES
-======================================== */
+                    <h3>
 
-let showcaseRotation = 180;
+                        ${product.name}
 
-let showcaseDragging = false;
+                    </h3>
 
-let showcaseLastX = 0;
-
-let showcaseVelocity = 0;
-
-let showcaseResumeAt = 0;
-
-let activeProduct = 0;
+                </div>
 
 
-/* ========================================
-   OPEN PRODUCT
-======================================== */
+                <strong>
 
-function openProduct(index) {
+                    ₹${product.price}
 
-    const product = products[index];
-
-    if (!product) return;
-
-    activeProduct = index;
+                </strong>
 
 
-    /* ------------------------------------
-       Product information
-    ------------------------------------ */
+            </div>
 
-    showcaseNumber.textContent =
-        product.number;
-
-    showcaseName.textContent =
-        product.name;
-
-    showcaseSubtitle.textContent =
-        product.subtitle;
+        `;
 
 
-    /* ------------------------------------
-       Product images
-    ------------------------------------ */
+        productsGrid.appendChild(card);
 
-    showcaseFrontImage.src =
-        product.front;
-
-    showcaseBackImage.src =
-        product.back;
+    });
 
 
-    showcaseFrontImage.alt =
-        product.name + " Front";
+    addQuickViewEvents();
 
-    showcaseBackImage.alt =
-        product.name + " Back";
+}
 
 
-    /* ------------------------------------
-       Start on BACK
-    ------------------------------------ */
-
-    showcaseRotation = 180;
-
-    showcaseVelocity = 0;
-
-    showcaseResumeAt =
-        performance.now() + 700;
+renderProducts();
 
 
-    /* ------------------------------------
-       Show modal
-    ------------------------------------ */
 
-    productModal.classList.add(
-        "active"
-    );
+/* ================================
+   PRODUCT TILT
+================================ */
 
-    document.body.classList.add(
-        "showcase-open"
-    );
+document.addEventListener("mousemove", (event) => {
+
+    if (window.innerWidth < 768) return;
 
 
-    /* ------------------------------------
-       Reset transform immediately
-    ------------------------------------ */
-
-    showcaseShirt.style.transform =
-        "rotateY(180deg)";
+    document
+        .querySelectorAll(".product-card")
+        .forEach((card) => {
 
 
-    /* Prevent page behind modal from moving */
+            const rect =
+                card.getBoundingClientRect();
+
+
+            const x =
+                event.clientX - rect.left;
+
+
+            const y =
+                event.clientY - rect.top;
+
+
+            if (
+                x >= 0 &&
+                x <= rect.width &&
+                y >= 0 &&
+                y <= rect.height
+            ) {
+
+
+                const rotateY =
+                    (x / rect.width - 0.5) * 8;
+
+
+                const rotateX =
+                    (y / rect.height - 0.5) * -8;
+
+
+                card.style.transform =
+
+                    `perspective(1000px)
+                    rotateX(${rotateX}deg)
+                    rotateY(${rotateY}deg)
+                    translateY(-8px)`;
+
+            }
+
+        });
+
+});
+
+
+document
+    .querySelectorAll(".product-card")
+    .forEach((card) => {
+
+
+        card.addEventListener("mouseleave", () => {
+
+            card.style.transform = "";
+
+        });
+
+    });
+
+
+
+/* ================================
+   PRODUCT MODAL
+================================ */
+
+const modal =
+    document.getElementById("product-modal");
+
+const modalImage =
+    document.getElementById("modal-product-image");
+
+const modalName =
+    document.getElementById("modal-product-name");
+
+const modalDescription =
+    document.getElementById("modal-product-description");
+
+const modalPrice =
+    document.getElementById("modal-product-price");
+
+const modalNumber =
+    document.getElementById("modal-product-number");
+
+
+
+function addQuickViewEvents() {
+
+
+    document
+        .querySelectorAll(".quick-view")
+        .forEach((button) => {
+
+
+            button.addEventListener("click", () => {
+
+
+                const productId =
+                    Number(button.dataset.id);
+
+
+                selectedProduct =
+                    products.find(
+                        product =>
+                            product.id === productId
+                    );
+
+
+                openProductModal();
+
+            });
+
+        });
+
+}
+
+
+
+function openProductModal() {
+
+
+    modalImage.src =
+        selectedProduct.image;
+
+
+    modalName.textContent =
+        selectedProduct.name;
+
+
+    modalDescription.textContent =
+        selectedProduct.description;
+
+
+    modalPrice.textContent =
+        "₹" + selectedProduct.price;
+
+
+    modalNumber.textContent =
+        "RED DRAGON / DROP " +
+        selectedProduct.number;
+
+
+    selectedSize = null;
+
+
+    document
+        .querySelectorAll(".size-button")
+        .forEach((button) => {
+
+            button.classList.remove("selected");
+
+        });
+
+
+    modal.classList.add("show");
+
 
     document.body.style.overflow =
         "hidden";
@@ -526,263 +503,544 @@ function openProduct(index) {
 }
 
 
-/* ========================================
-   CLOSE PRODUCT
-======================================== */
 
-function closeProduct() {
+function closeProductModal() {
 
-    productModal.classList.remove(
-        "active"
-    );
 
-    document.body.classList.remove(
-        "showcase-open"
-    );
+    modal.classList.remove("show");
+
 
     document.body.style.overflow =
         "";
 
-    showcaseDragging = false;
-
 }
 
 
-/* ========================================
-   VIEW PRODUCT BUTTONS
-======================================== */
-
-const productButtons =
-    document.querySelectorAll(
-        ".product-info button"
+document
+    .getElementById("modal-close")
+    .addEventListener(
+        "click",
+        closeProductModal
     );
 
 
-productButtons.forEach(
-    function (button, index) {
+document
+    .getElementById("modal-overlay")
+    .addEventListener(
+        "click",
+        closeProductModal
+    );
 
-        button.addEventListener(
-            "click",
-            function () {
 
-                openProduct(index);
 
-            }
+/* ================================
+   SIZE SELECTION
+================================ */
+
+document
+    .querySelectorAll(".size-button")
+    .forEach((button) => {
+
+
+        button.addEventListener("click", () => {
+
+
+            document
+                .querySelectorAll(".size-button")
+                .forEach((item) => {
+
+                    item.classList.remove("selected");
+
+                });
+
+
+            button.classList.add("selected");
+
+
+            selectedSize =
+                button.textContent.trim();
+
+        });
+
+    });
+
+
+
+/* ================================
+   ADD TO CART
+================================ */
+
+const addCartButton =
+    document.getElementById("add-cart-button");
+
+
+addCartButton.addEventListener("click", () => {
+
+
+    if (!selectedSize) {
+
+        showToast(
+            "PLEASE SELECT A SIZE"
         );
 
-    }
-);
-
-
-/* ========================================
-   CLOSE BUTTONS
-======================================== */
-
-showcaseClose.addEventListener(
-    "click",
-    closeProduct
-);
-
-showcaseCloseButton.addEventListener(
-    "click",
-    closeProduct
-);
-
-showcaseOverlay.addEventListener(
-    "click",
-    closeProduct
-);
-
-
-/* ========================================
-   ESC KEY
-======================================== */
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Escape" &&
-            productModal.classList.contains("active")
-        ) {
-
-            closeProduct();
-
-        }
+        return;
 
     }
-);
 
 
-/* ========================================
-   PRODUCT SHOWCASE POINTER DOWN
-======================================== */
+    const existingItem =
+        cart.find((item) =>
 
-showcaseShirt.addEventListener(
-    "pointerdown",
-    function (event) {
+            item.id === selectedProduct.id &&
+            item.size === selectedSize
 
-        showcaseDragging = true;
-
-        showcaseLastX =
-            event.clientX;
-
-        showcaseVelocity = 0;
-
-        showcaseResumeAt =
-            Infinity;
-
-        showcaseShirt.setPointerCapture(
-            event.pointerId
         );
 
-        event.preventDefault();
+
+    if (existingItem) {
+
+        existingItem.quantity++;
 
     }
+
+    else {
+
+        cart.push({
+
+            id:
+                selectedProduct.id,
+
+            name:
+                selectedProduct.name,
+
+            image:
+                selectedProduct.image,
+
+            price:
+                selectedProduct.price,
+
+            size:
+                selectedSize,
+
+            quantity:
+                1
+
+        });
+
+    }
+
+
+    saveCart();
+
+
+    updateCart();
+
+
+    closeProductModal();
+
+
+    showToast(
+        "ADDED TO CART"
+    );
+
+});
+
+
+
+/* ================================
+   CART
+================================ */
+
+const cartDrawer =
+    document.getElementById("cart-drawer");
+
+const cartOverlay =
+    document.getElementById("cart-overlay");
+
+const cartItems =
+    document.getElementById("cart-items");
+
+const cartCount =
+    document.getElementById("cart-count");
+
+const cartTotal =
+    document.getElementById("cart-total");
+
+
+document
+    .getElementById("open-cart")
+    .addEventListener("click", openCart);
+
+
+document
+    .getElementById("close-cart")
+    .addEventListener("click", closeCart);
+
+
+cartOverlay.addEventListener(
+    "click",
+    closeCart
 );
 
 
-/* ========================================
-   PRODUCT SHOWCASE POINTER MOVE
-======================================== */
 
-showcaseShirt.addEventListener(
-    "pointermove",
-    function (event) {
+function openCart() {
 
-        if (!showcaseDragging) return;
+    cartDrawer.classList.add("open");
 
-        const currentX =
-            event.clientX;
-
-        const difference =
-            currentX - showcaseLastX;
-
-        const dragAmount =
-            difference * 0.65;
-
-        showcaseRotation +=
-            dragAmount;
-
-        showcaseVelocity =
-            dragAmount;
-
-        showcaseLastX =
-            currentX;
-
-    }
-);
-
-
-/* ========================================
-   PRODUCT SHOWCASE POINTER UP
-======================================== */
-
-function stopShowcaseDragging(event) {
-
-    if (!showcaseDragging) return;
-
-    showcaseDragging = false;
-
-    try {
-
-        showcaseShirt.releasePointerCapture(
-            event.pointerId
-        );
-
-    } catch (error) {}
-
-
-    /* Momentum */
-
-    if (
-        Math.abs(showcaseVelocity) > 0.1
-    ) {
-
-        showcaseRotation +=
-            showcaseVelocity * 3;
-
-    }
-
-
-    /* Resume after 2 seconds */
-
-    showcaseResumeAt =
-        performance.now() + 2000;
-
-    showcaseVelocity = 0;
+    cartOverlay.classList.add("show");
 
 }
 
 
-showcaseShirt.addEventListener(
-    "pointerup",
-    stopShowcaseDragging
-);
+function closeCart() {
 
-showcaseShirt.addEventListener(
-    "pointercancel",
-    stopShowcaseDragging
-);
+    cartDrawer.classList.remove("open");
+
+    cartOverlay.classList.remove("show");
+
+}
 
 
-/* ========================================
-   PRODUCT SHOWCASE ANIMATION
-======================================== */
 
-function animateShowcase(time) {
+function saveCart() {
 
-    if (
-        productModal.classList.contains("active")
-    ) {
+    localStorage.setItem(
 
-        /* Automatic rotation */
+        "redDragonCart",
 
-        if (
-            !showcaseDragging &&
-            time >= showcaseResumeAt
-        ) {
+        JSON.stringify(cart)
 
-            showcaseRotation +=
-                0.30;
+    );
 
-        }
+}
 
 
-        /* Keep rotation under control */
 
-        if (showcaseRotation > 360) {
-
-            showcaseRotation -= 360;
-
-        }
-
-        if (showcaseRotation < -360) {
-
-            showcaseRotation += 360;
-
-        }
+function updateCart() {
 
 
-        /* Apply rotation */
+    cartItems.innerHTML = "";
 
-        showcaseShirt.style.transform = `
 
-            rotateY(${showcaseRotation}deg)
+    let totalItems = 0;
+
+    let totalPrice = 0;
+
+
+    if (cart.length === 0) {
+
+
+        cartItems.innerHTML =
+
+            `<p class="empty-cart">
+
+                YOUR CART IS EMPTY.
+
+            </p>`;
+
+
+    }
+
+
+    cart.forEach((item, index) => {
+
+
+        totalItems +=
+            item.quantity;
+
+
+        totalPrice +=
+            item.price *
+            item.quantity;
+
+
+        const cartItem =
+            document.createElement("div");
+
+
+        cartItem.className =
+            "cart-item";
+
+
+        cartItem.innerHTML = `
+
+            <img
+                src="${item.image}"
+                alt="${item.name}">
+
+
+            <div class="cart-item-info">
+
+
+                <h3>
+
+                    ${item.name}
+
+                </h3>
+
+
+                <span>
+
+                    SIZE: ${item.size}
+
+                </span>
+
+
+                <strong>
+
+                    ₹${item.price}
+
+                </strong>
+
+
+                <div class="quantity-controls">
+
+
+                    <button
+                        data-action="minus"
+                        data-index="${index}">
+
+                        −
+
+                    </button>
+
+
+                    <span>
+
+                        ${item.quantity}
+
+                    </span>
+
+
+                    <button
+                        data-action="plus"
+                        data-index="${index}">
+
+                        +
+
+                    </button>
+
+
+                    <button
+                        class="remove-item"
+                        data-action="remove"
+                        data-index="${index}">
+
+                        REMOVE
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
 
         `;
 
-    }
+
+        cartItems.appendChild(cartItem);
+
+    });
 
 
-    requestAnimationFrame(
-        animateShowcase
-    );
+    cartCount.textContent =
+        totalItems;
+
+
+    cartTotal.textContent =
+        "₹" + totalPrice;
+
+
+    addCartControlEvents();
 
 }
 
 
-requestAnimationFrame(
-    animateShowcase
-);
+
+function addCartControlEvents() {
+
+
+    document
+        .querySelectorAll(
+            ".quantity-controls button"
+        )
+        .forEach((button) => {
+
+
+            button.addEventListener("click", () => {
+
+
+                const index =
+                    Number(
+                        button.dataset.index
+                    );
+
+
+                const action =
+                    button.dataset.action;
+
+
+                if (action === "plus") {
+
+                    cart[index].quantity++;
+
+                }
+
+
+                if (action === "minus") {
+
+
+                    cart[index].quantity--;
+
+
+                    if (
+                        cart[index].quantity <= 0
+                    ) {
+
+                        cart.splice(
+                            index,
+                            1
+                        );
+
+                    }
+
+                }
+
+
+                if (action === "remove") {
+
+                    cart.splice(
+                        index,
+                        1
+                    );
+
+                }
+
+
+                saveCart();
+
+                updateCart();
+
+            });
+
+        });
+
+}
+
+
+
+updateCart();
+
+
+
+/* ================================
+   MOBILE MENU
+================================ */
+
+const menuButton =
+    document.getElementById("menu-button");
+
+const mobileMenu =
+    document.getElementById("mobile-menu");
+
+
+menuButton.addEventListener("click", () => {
+
+    mobileMenu.classList.toggle("open");
+
+});
+
+
+document
+    .querySelectorAll(".mobile-menu a")
+    .forEach((link) => {
+
+
+        link.addEventListener("click", () => {
+
+            mobileMenu.classList.remove("open");
+
+        });
+
+    });
+
+
+
+/* ================================
+   NEWSLETTER
+================================ */
+
+document
+    .getElementById("newsletter-form")
+    .addEventListener("submit", (event) => {
+
+
+        event.preventDefault();
+
+
+        event.target.reset();
+
+
+        showToast(
+            "WELCOME TO THE DRAGON."
+        );
+
+    });
+
+
+
+/* ================================
+   TOAST
+================================ */
+
+function showToast(message) {
+
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2500);
+
+}
+
+
+
+/* ================================
+   CHECKOUT
+================================ */
+
+document
+    .getElementById("checkout-button")
+    .addEventListener("click", () => {
+
+
+        if (cart.length === 0) {
+
+            showToast(
+                "YOUR CART IS EMPTY"
+            );
+
+            return;
+
+        }
+
+
+        showToast(
+            "CHECKOUT COMING SOON"
+        );
+
+    });
