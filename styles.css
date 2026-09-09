@@ -3175,84 +3175,132 @@ footer p {
     }
 }
 /* =========================================
-   HERO BUTTON / TOUCH FIX
+   HERO CONTROLS - HARD CLICK/TOUCH FIX
+   Added by ChatGPT
 ========================================= */
 
-/* Keep the viewer in its own layer */
-.hero-product-area {
-    position: relative;
-    z-index: 1;
-}
-
-/* T-shirt remains draggable */
-.hero-product {
-    position: relative;
-    z-index: 5;
-}
-
-/* Decorative elements must NEVER block buttons */
-.product-light,
-.product-number,
-.orbit,
+/* Decorative hero layers should never capture input */
 .noise,
 #particles,
-.background-glow {
+.background-glow,
+.orbit,
+.product-light,
+.product-number,
+.drag-text {
     pointer-events: none !important;
 }
 
-/* FRONT / BACK always clickable */
+/* Keep hero sections in predictable stacking contexts */
+.hero {
+    isolation: isolate;
+}
+
+.hero-text {
+    position: relative;
+    z-index: 30 !important;
+}
+
+.hero-product-area {
+    position: relative;
+    z-index: 10 !important;
+    pointer-events: none;
+}
+
+/* Only the shirt itself and its controls should receive pointer input */
+.hero-product {
+    position: relative;
+    z-index: 20 !important;
+    pointer-events: auto !important;
+    touch-action: pan-y;
+}
+
+.hero-product img {
+    pointer-events: none !important;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 .rotation-controls {
-    position: absolute;
-    z-index: 100 !important;
+    z-index: 200 !important;
     pointer-events: auto !important;
 }
 
 .rotation-button {
     position: relative;
-    z-index: 101;
+    z-index: 201 !important;
     pointer-events: auto !important;
-    touch-action: manipulation;
-    cursor: pointer;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Product 01 / 02 / 03 selector always above viewer */
+/* 01 / 02 / 03 product selector */
 .hero-switcher {
-    position: relative;
-    z-index: 100 !important;
+    z-index: 300 !important;
     pointer-events: auto !important;
 }
 
 .switcher {
     position: relative;
-    z-index: 101;
+    z-index: 301 !important;
     pointer-events: auto !important;
-    touch-action: manipulation;
-    cursor: pointer;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Mobile-specific protection */
-@media (max-width: 1000px) {
+/* Ensure no pseudo-element can cover interactive controls */
+.hero-switcher::before,
+.hero-switcher::after,
+.rotation-controls::before,
+.rotation-controls::after,
+.switcher::before,
+.switcher::after,
+.rotation-button::before,
+.rotation-button::after {
+    pointer-events: none !important;
+}
 
+/* Mobile/tablet: place product selector fully outside viewer layer */
+@media (max-width: 1000px) {
     .hero-product-area {
-        z-index: 1;
+        z-index: 10 !important;
+        pointer-events: none;
     }
 
-    .hero-switcher {
-        position: relative;
-        z-index: 100 !important;
+    .hero-product {
+        pointer-events: auto !important;
     }
 
     .rotation-controls {
-        z-index: 100 !important;
+        z-index: 250 !important;
+        pointer-events: auto !important;
+    }
+
+    .hero-switcher {
+        position: relative !important;
+        z-index: 400 !important;
+        pointer-events: auto !important;
+        isolation: isolate;
+    }
+
+    .switcher {
+        z-index: 401 !important;
+        pointer-events: auto !important;
     }
 }
 
-/* Extra mobile touch reliability */
 @media (max-width: 700px) {
+    .rotation-controls {
+        bottom: 45px;
+        z-index: 500 !important;
+    }
+
+    .hero-switcher {
+        z-index: 600 !important;
+        margin-top: 28px;
+    }
 
     .rotation-button,
     .switcher {
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
+        min-height: 42px;
     }
 }
