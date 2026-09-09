@@ -3147,3 +3147,30 @@ footer p {
     }
 
 }
+/* =========================================
+   VERSION 2 LOADER SAFETY FIX
+========================================= */
+
+#loader {
+    animation: redDragonLoaderTimeout 2s ease forwards;
+    animation-delay: 1.2s;
+}
+
+#loader.hide {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+@keyframes redDragonLoaderTimeout {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
