@@ -3174,3 +3174,85 @@ footer p {
         pointer-events: none;
     }
 }
+/* =========================================
+   HERO BUTTON / TOUCH FIX
+========================================= */
+
+/* Keep the viewer in its own layer */
+.hero-product-area {
+    position: relative;
+    z-index: 1;
+}
+
+/* T-shirt remains draggable */
+.hero-product {
+    position: relative;
+    z-index: 5;
+}
+
+/* Decorative elements must NEVER block buttons */
+.product-light,
+.product-number,
+.orbit,
+.noise,
+#particles,
+.background-glow {
+    pointer-events: none !important;
+}
+
+/* FRONT / BACK always clickable */
+.rotation-controls {
+    position: absolute;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+}
+
+.rotation-button {
+    position: relative;
+    z-index: 101;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+/* Product 01 / 02 / 03 selector always above viewer */
+.hero-switcher {
+    position: relative;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+}
+
+.switcher {
+    position: relative;
+    z-index: 101;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+/* Mobile-specific protection */
+@media (max-width: 1000px) {
+
+    .hero-product-area {
+        z-index: 1;
+    }
+
+    .hero-switcher {
+        position: relative;
+        z-index: 100 !important;
+    }
+
+    .rotation-controls {
+        z-index: 100 !important;
+    }
+}
+
+/* Extra mobile touch reliability */
+@media (max-width: 700px) {
+
+    .rotation-button,
+    .switcher {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+}
