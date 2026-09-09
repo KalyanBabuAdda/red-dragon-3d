@@ -189,44 +189,275 @@ document.addEventListener("DOMContentLoaded", () {
     }
 
 
-    const heroFront =
-        document.getElementById("hero-front");
+    /* =========================================
+   HERO BUTTONS - STRONG FIX
+========================================= */
 
-    const heroBack =
-        document.getElementById("hero-back");
+const heroFront =
+    document.getElementById("hero-front");
+
+const heroBack =
+    document.getElementById("hero-back");
 
 
-    if (heroFront) {
+/* -----------------------------------------
+   FRONT BUTTON
+----------------------------------------- */
 
-        heroFront.addEventListener(
-            "click",
-            () => rotateHero("front")
+if (heroFront) {
+
+    heroFront.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log("FRONT BUTTON CLICKED");
+
+        rotateHero("front");
+
+    };
+
+}
+
+
+/* -----------------------------------------
+   BACK BUTTON
+----------------------------------------- */
+
+if (heroBack) {
+
+    heroBack.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log("BACK BUTTON CLICKED");
+
+        rotateHero("back");
+
+    };
+
+}
+
+
+/* -----------------------------------------
+   PRODUCT 01 / 02 / 03 BUTTONS
+----------------------------------------- */
+
+switchers.forEach((button) => {
+
+    button.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const productIndex =
+            Number(
+                button.dataset.product
+            );
+
+        console.log(
+            "PRODUCT BUTTON CLICKED:",
+            productIndex
         );
 
-    }
+        if (
+            Number.isNaN(productIndex) ||
+            !products[productIndex]
+        ) {
+            return;
+        }
 
-
-    if (heroBack) {
-
-        heroBack.addEventListener(
-            "click",
-            () => rotateHero("back")
+        changeHeroProduct(
+            productIndex
         );
 
-    }
+    };
+
+});
 
 
-    switchers.forEach((button, index) => {
+/* =========================================
+   FALLBACK EVENT DELEGATION
+========================================= */
 
-        button.addEventListener(
-            "click",
-            () => {
-                changeHeroProduct(index);
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const front =
+            event.target.closest(
+                "#hero-front"
+            );
+
+        const back =
+            event.target.closest(
+                "#hero-back"
+            );
+
+        const switcher =
+            event.target.closest(
+                ".hero-switcher .switcher"
+            );
+
+
+        /* FRONT */
+
+        if (front) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            rotateHero("front");
+
+            return;
+
+        }
+
+
+        /* BACK */
+
+        if (back) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            rotateHero("back");
+
+            return;
+
+        }
+
+
+        /* PRODUCT SWITCHER */
+
+        if (switcher) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const productIndex =
+                Number(
+                    switcher.dataset.product
+                );
+
+            if (
+                Number.isNaN(productIndex) ||
+                !products[productIndex]
+            ) {
+                return;
             }
-        );
 
-    });
+            changeHeroProduct(
+                productIndex
+            );
 
+        }
+
+    },
+    true
+);
+
+
+/* =========================================
+   TOUCH FALLBACK
+========================================= */
+
+document.addEventListener(
+    "pointerdown",
+    function (event) {
+
+        const x =
+            event.clientX;
+
+        const y =
+            event.clientY;
+
+
+        function isInside(element) {
+
+            if (!element) {
+                return false;
+            }
+
+            const rect =
+                element.getBoundingClientRect();
+
+            return (
+                x >= rect.left &&
+                x <= rect.right &&
+                y >= rect.top &&
+                y <= rect.bottom
+            );
+
+        }
+
+
+        /* If actual button received event,
+           normal click handler will handle it */
+
+        if (
+            event.target.closest(
+                "#hero-front, #hero-back, .hero-switcher .switcher"
+            )
+        ) {
+            return;
+        }
+
+
+        /* FRONT */
+
+        if (isInside(heroFront)) {
+
+            event.preventDefault();
+
+            rotateHero("front");
+
+            return;
+
+        }
+
+
+        /* BACK */
+
+        if (isInside(heroBack)) {
+
+            event.preventDefault();
+
+            rotateHero("back");
+
+            return;
+
+        }
+
+
+        /* PRODUCT BUTTONS */
+
+        for (
+            let i = 0;
+            i < switchers.length;
+            i++
+        ) {
+
+            if (
+                isInside(
+                    switchers[i]
+                )
+            ) {
+
+                event.preventDefault();
+
+                changeHeroProduct(i);
+
+                return;
+
+            }
+
+        }
+
+    },
+    true
+);
 
     if (nextProduct) {
 
