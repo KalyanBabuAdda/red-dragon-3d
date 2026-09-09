@@ -3147,17 +3147,3 @@ footer p {
     }
 
 }
-/* TEMPORARY LOADER FIX */
-
-#loader {
-    animation: forceHideLoader 1.5s forwards;
-    animation-delay: 1.5s;
-}
-
-@keyframes forceHideLoader {
-    to {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
-}
