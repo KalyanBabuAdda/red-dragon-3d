@@ -1,254 +1,899 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0">
 
-    <title>RED DRAGON STREETWEAR</title>
+    <title>
+        RED DRAGON STREETWEAR
+    </title>
 
-    <link rel="stylesheet" href="style.css">
+    <meta name="description"
+        content="RED DRAGON STREETWEAR - Premium Streetwear Collection">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
 </head>
+
 
 <body>
 
-    <!-- Navigation -->
-    <header class="navbar">
 
-        <div class="logo">
-            RED DRAGON
+    <!-- LOADING SCREEN -->
+
+    <div id="loader">
+
+        <div class="loader-logo">
+
+            RED
+            <span>DRAGON</span>
+
         </div>
 
-        <nav>
+        <div class="loader-line"></div>
+
+    </div>
+
+
+
+    <!-- BACKGROUND -->
+
+    <div class="noise"></div>
+
+    <div class="background-glow glow-one"></div>
+
+    <div class="background-glow glow-two"></div>
+
+    <div id="particles"></div>
+
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <a href="#home"
+            class="logo">
+
+            <span>RED</span>
+            DRAGON
+
+        </a>
+
+
+        <nav id="desktop-nav">
+
             <a href="#home">HOME</a>
-            <a href="#collection">COLLECTION</a>
-            <a href="#about">ABOUT</a>
+
+            <a href="#collection">
+                COLLECTION
+            </a>
+
+            <a href="#about">
+                ABOUT
+            </a>
+
         </nav>
 
-        <div class="cart">
-            🛒 <span>0</span>
+
+        <div class="header-actions">
+
+            <button
+                class="cart-button"
+                id="open-cart">
+
+                CART
+
+                <span id="cart-count">
+                    0
+                </span>
+
+            </button>
+
+
+            <button
+                class="menu-button"
+                id="menu-button">
+
+                ☰
+
+            </button>
+
         </div>
 
     </header>
 
 
-    <!-- Hero Section -->
-    <main>
 
-        <section id="home" class="hero">
+    <!-- MOBILE MENU -->
 
-            <div class="hero-content">
+    <div
+        class="mobile-menu"
+        id="mobile-menu">
 
-                <p class="eyebrow">
-                    NEW DROP // 2026
-                </p>
+        <a href="#home">
+            HOME
+        </a>
+
+        <a href="#collection">
+            COLLECTION
+        </a>
+
+        <a href="#about">
+            ABOUT
+        </a>
+
+    </div>
+
+
+
+    <!-- HERO -->
+
+    <main id="home">
+
+
+        <section class="hero">
+
+
+            <!-- LEFT -->
+
+            <div class="hero-text">
+
+                <div class="eyebrow">
+
+                    <span></span>
+
+                    NEW DROP / 2026
+
+                </div>
+
 
                 <h1>
-                    WEAR THE<br>
-                    <span>ATTITUDE</span>
+
+                    WEAR
+                    <br>
+
+                    THE
+
+                    <span>
+                        ATTITUDE
+                    </span>
+
                 </h1>
 
-                <p class="hero-description">
-                    Premium streetwear designed for
-                    those who don't follow the crowd.
+
+                <p>
+
+                    Streetwear created for those
+                    who don't follow the crowd.
+
                 </p>
 
-                <a href="#collection" class="hero-button">
-                    EXPLORE DROP →
-                </a>
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="#collection"
+                        class="primary-button">
+
+                        EXPLORE DROP
+
+                        <span>
+                            ↓
+                        </span>
+
+                    </a>
+
+
+                    <button
+                        class="secondary-button"
+                        id="next-product">
+
+                        NEXT DESIGN
+
+                        →
+
+                    </button>
+
+                </div>
+
 
             </div>
 
 
-            <!-- Floating 3D Product -->
-            <div class="hero-product">
 
-                <div class="product-glow"></div>
+            <!-- PRODUCT -->
 
-                <div class="hero-shirt-3d" id="hero-shirt">
-
-                    <!-- FRONT -->
-                    <div class="shirt-face shirt-front">
-
-                        <img
-                            src="assets/product-1-front.png"
-                            alt="Pawan Kalyan T-Shirt Front"
-                        >
-
-                    </div>
+            <div class="hero-product-area">
 
 
-                    <!-- BACK -->
-                    <div class="shirt-face shirt-back">
+                <div class="product-number">
 
-                        <img
-                            src="assets/product-1-back.png"
-                            alt="Pawan Kalyan T-Shirt Back"
-                        >
-
-                    </div>
+                    01
 
                 </div>
+
+
+                <div
+                    class="orbit orbit-one">
+
+                </div>
+
+
+                <div
+                    class="orbit orbit-two">
+
+                </div>
+
+
+
+                <div
+                    class="hero-product"
+                    id="hero-product">
+
+
+                    <div
+                        class="product-light">
+
+                    </div>
+
+
+                    <img
+                        id="hero-image"
+                        src="images/product-1.png"
+                        alt="RED DRAGON STREETWEAR">
+
+
+                </div>
+
+
+
+                <div class="drag-text">
+
+                    <span>
+                        ✦
+                    </span>
+
+                    MOVE TO EXPLORE
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PRODUCT SWITCHER -->
+
+            <div class="hero-switcher">
+
+                <button
+                    class="switcher active"
+                    data-product="0">
+
+                    <span>01</span>
+
+                    PAWAN KALYAN
+
+                </button>
+
+
+                <button
+                    class="switcher"
+                    data-product="1">
+
+                    <span>02</span>
+
+                    POWER STAR
+
+                </button>
+
+
+                <button
+                    class="switcher"
+                    data-product="2">
+
+                    <span>03</span>
+
+                    KALYAN BABU
+
+                </button>
+
+            </div>
+
+
+            <div class="scroll-indicator">
+
+                SCROLL
+
+                <div></div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- MARQUEE -->
+
+        <section class="marquee">
+
+            <div class="marquee-track">
+
+                <span>
+                    RED DRAGON STREETWEAR
+                </span>
+
+                <span class="red-text">
+                    ◆
+                </span>
+
+                <span>
+                    WEAR THE ATTITUDE
+                </span>
+
+                <span class="red-text">
+                    ◆
+                </span>
+
+                <span>
+                    LIMITED DROP
+                </span>
+
+                <span class="red-text">
+                    ◆
+                </span>
+
+                <span>
+                    RED DRAGON STREETWEAR
+                </span>
+
+                <span class="red-text">
+                    ◆
+                </span>
+
+                <span>
+                    WEAR THE ATTITUDE
+                </span>
 
             </div>
 
         </section>
 
 
-        <!-- Collection -->
-        <section id="collection" class="collection">
 
-            <div class="section-heading">
+        <!-- COLLECTION -->
 
-                <p>THE DROP</p>
+        <section
+            class="collection"
+            id="collection">
+
+
+            <div class="section-header">
+
+
+                <div>
+
+                    <span class="section-number">
+
+                        01
+
+                    </span>
+
+
+                    <h2>
+
+                        THE
+                        <br>
+
+                        DROP
+
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    Three designs.
+                    One attitude.
+
+                    <br>
+
+                    Choose your statement.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- PRODUCT GRID -->
+
+            <div
+                class="products-grid"
+                id="products-grid">
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- STATEMENT -->
+
+        <section class="statement">
+
+
+            <p>
+
+                STREETWEAR IS NOT
+                <span>
+                    JUST CLOTHING.
+                </span>
+
+            </p>
+
+
+            <h2>
+
+                IT'S AN
+                <span>
+                    ATTITUDE.
+                </span>
+
+            </h2>
+
+
+        </section>
+
+
+
+        <!-- ABOUT -->
+
+        <section
+            class="about"
+            id="about">
+
+
+            <div class="about-left">
+
+                <span class="section-number">
+
+                    02
+
+                </span>
+
 
                 <h2>
-                    01 — 03
+
+                    BORN FOR
+                    <br>
+
+                    THE
+                    <span>
+                        STREETS.
+                    </span>
+
+                </h2>
+
+
+            </div>
+
+
+            <div class="about-right">
+
+                <p>
+
+                    RED DRAGON STREETWEAR
+                    represents confidence,
+                    individuality and attitude.
+
+                </p>
+
+
+                <p>
+
+                    Every design is created
+                    for people who want to
+                    stand out without saying
+                    a word.
+
+                </p>
+
+
+                <div class="about-tags">
+
+                    <span>
+                        STREET
+                    </span>
+
+                    <span>
+                        CULTURE
+                    </span>
+
+                    <span>
+                        ATTITUDE
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- NEWSLETTER -->
+
+        <section class="newsletter">
+
+
+            <div>
+
+                <span>
+                    STAY CONNECTED
+                </span>
+
+
+                <h2>
+
+                    JOIN THE
+                    <span>
+                        DRAGON.
+                    </span>
+
                 </h2>
 
             </div>
 
 
-            <div class="products">
+            <form
+                id="newsletter-form">
 
-                <!-- Product 1 -->
-                <article class="product-card">
-
-                    <div class="product-image">
-
-                        <img
-                            src="assets/product-1-front.png"
-                            alt="Pawan Kalyan T-Shirt"
-                        >
-
-                    </div>
-
-                    <div class="product-info">
-
-                        <span>01</span>
-
-                        <h3>
-                            PAWAN KALYAN
-                        </h3>
-
-                        <p>
-                            POWER STAR EDITION
-                        </p>
-
-                        <button>
-                            VIEW PRODUCT →
-                        </button>
-
-                    </div>
-
-                </article>
+                <input
+                    type="email"
+                    placeholder="YOUR EMAIL ADDRESS"
+                    required>
 
 
-                <!-- Product 2 -->
-                <article class="product-card">
+                <button type="submit">
 
-                    <div class="product-image">
+                    JOIN
 
-                        <img
-                            src="assets/product-2-front.png"
-                            alt="Power Star T-Shirt"
-                        >
+                    →
 
-                    </div>
+                </button>
 
-                    <div class="product-info">
+            </form>
 
-                        <span>02</span>
-
-                        <h3>
-                            POWER STAR
-                        </h3>
-
-                        <p>
-                            EYE OF THE STAR
-                        </p>
-
-                        <button>
-                            VIEW PRODUCT →
-                        </button>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 3 -->
-                <article class="product-card">
-
-                    <div class="product-image">
-
-                        <img
-                            src="assets/product-3-front.png"
-                            alt="Kalyan Babu T-Shirt"
-                        >
-
-                    </div>
-
-                    <div class="product-info">
-
-                        <span>03</span>
-
-                        <h3>
-                            KALYAN BABU
-                        </h3>
-
-                        <p>
-                            SINCE 1971
-                        </p>
-
-                        <button>
-                            VIEW PRODUCT →
-                        </button>
-
-                    </div>
-
-                </article>
-
-            </div>
 
         </section>
 
 
-        <!-- About -->
-        <section id="about" class="about">
-
-            <p class="eyebrow">
-                RED DRAGON STREETWEAR
-            </p>
-
-            <h2>
-                NOT MADE<br>
-                TO BLEND IN.
-            </h2>
-
-            <p>
-                Streetwear for the ones who carry
-                their attitude everywhere they go.
-            </p>
-
-        </section>
 
     </main>
 
 
+
+    <!-- FOOTER -->
+
     <footer>
 
+
+        <div class="footer-logo">
+
+            RED
+            <span>
+                DRAGON
+            </span>
+
+            <small>
+                STREETWEAR
+            </small>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="#home">
+                HOME
+            </a>
+
+            <a href="#collection">
+                COLLECTION
+            </a>
+
+            <a href="#about">
+                ABOUT
+            </a>
+
+        </div>
+
+
         <p>
+
             © 2026 RED DRAGON STREETWEAR
+
         </p>
+
 
     </footer>
 
 
+
+    <!-- CART DRAWER -->
+
+    <div
+        class="cart-overlay"
+        id="cart-overlay">
+
+    </div>
+
+
+    <aside
+        class="cart-drawer"
+        id="cart-drawer">
+
+
+        <div class="cart-header">
+
+            <h2>
+
+                YOUR
+                <span>
+                    CART
+                </span>
+
+            </h2>
+
+
+            <button
+                id="close-cart">
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+
+        <div
+            class="cart-items"
+            id="cart-items">
+
+
+            <p class="empty-cart">
+
+                YOUR CART IS EMPTY.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="cart-footer">
+
+
+            <div class="cart-total">
+
+                <span>
+                    TOTAL
+                </span>
+
+
+                <strong id="cart-total">
+
+                    ₹0
+
+                </strong>
+
+            </div>
+
+
+            <button
+                class="checkout-button"
+                id="checkout-button">
+
+                PROCEED TO CHECKOUT
+
+                →
+
+            </button>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- PRODUCT MODAL -->
+
+    <div
+        class="modal"
+        id="product-modal">
+
+
+        <div
+            class="modal-overlay"
+            id="modal-overlay">
+
+        </div>
+
+
+        <div class="modal-content">
+
+
+            <button
+                class="modal-close"
+                id="modal-close">
+
+                ✕
+
+            </button>
+
+
+            <div
+                class="modal-image">
+
+                <img
+                    id="modal-product-image"
+                    src=""
+                    alt="Product">
+
+            </div>
+
+
+
+            <div class="modal-info">
+
+
+                <span
+                    id="modal-product-number">
+
+                    DROP 01
+
+                </span>
+
+
+                <h2
+                    id="modal-product-name">
+
+                </h2>
+
+
+                <p
+                    id="modal-product-description">
+
+                </p>
+
+
+                <h3
+                    id="modal-product-price">
+
+                </h3>
+
+
+
+                <div class="size-title">
+
+                    SELECT SIZE
+
+                </div>
+
+
+                <div
+                    class="sizes"
+                    id="sizes">
+
+
+                    <button
+                        class="size-button">
+
+                        S
+
+                    </button>
+
+
+                    <button
+                        class="size-button">
+
+                        M
+
+                    </button>
+
+
+                    <button
+                        class="size-button">
+
+                        L
+
+                    </button>
+
+
+                    <button
+                        class="size-button">
+
+                        XL
+
+                    </button>
+
+
+                    <button
+                        class="size-button">
+
+                        XXL
+
+                    </button>
+
+
+                </div>
+
+
+                <button
+                    class="add-cart-button"
+                    id="add-cart-button">
+
+                    ADD TO CART
+
+                    +
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast">
+
+        ADDED TO CART
+
+    </div>
+
+
+
+    <script src="products.js"></script>
+
     <script src="script.js"></script>
 
+
 </body>
+
 </html>
-```
